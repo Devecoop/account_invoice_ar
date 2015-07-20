@@ -1,4 +1,4 @@
-#! -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 #This file is part of Tryton.  The COPYRIGHT file at the top level of
 #this repository contains the full copyright notices and license terms.
 
@@ -734,7 +734,11 @@ class InvoiceReport(Report):
 
     @classmethod
     def _get_condicion_iva_cliente(cls, Invoice, invoice):
-        return dict(invoice.party._fields['iva_condition'].selection)[invoice.party.iva_condition]
+        Party = Pool().get('party.party')
+        party = Party.search(('id', '=', invoice.party.id))[0]
+
+        iva_condition_display = dict(invoice.party._fields['iva_condition'].selection)
+        return [iva_condition_display[str(party.iva_condition)]]
 
     @classmethod
     def _get_vat_number_cliente(cls, Invoice, invoice):
